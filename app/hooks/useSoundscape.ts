@@ -26,27 +26,7 @@ export function useSoundscape() {
     ambientRef.current = null;
   }, []);
 
-  useEffect(() => {
-    const unlock = () => {
-      if (!contextRef.current) {
-        contextRef.current = new AudioContext();
-      }
-      if (contextRef.current.state === "suspended") {
-        contextRef.current.resume();
-      }
-      startAmbient(contextRef.current);
-      window.removeEventListener("pointerdown", unlock);
-    };
-
-    window.addEventListener("pointerdown", unlock, { once: true });
-    return () => {
-      window.removeEventListener("pointerdown", unlock);
-      stopAmbient();
-      contextRef.current?.close();
-    };
-  }, [stopAmbient]);
-
-  const startAmbient = (ctx: AudioContext) => {
+  const startAmbient = useCallback((ctx: AudioContext) => {
     stopAmbient();
     const master = ctx.createGain();
     master.gain.value = 0.03; // Much quieter master volume
@@ -102,7 +82,27 @@ export function useSoundscape() {
       gains: [padGain],
       intervals: [chimes, highChimes],
     };
-  };
+  }, [stopAmbient]);
+
+  useEffect(() => {
+    const unlock = () => {
+      if (!contextRef.current) {
+        contextRef.current = new AudioContext();
+      }
+      if (contextRef.current.state === "suspended") {
+        contextRef.current.resume();
+      }
+      startAmbient(contextRef.current);
+      window.removeEventListener("pointerdown", unlock);
+    };
+
+    window.addEventListener("pointerdown", unlock, { once: true });
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      stopAmbient();
+      contextRef.current?.close();
+    };
+  }, [stopAmbient, startAmbient]);
 
   const playTap = useCallback(() => {
     const ctx = contextRef.current;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Background } from "../components/Background";
@@ -9,11 +9,6 @@ import { ScrollPoem } from "../components/ScrollPoem";
 import { Lantern } from "../components/Lantern";
 
 const POEM_LINES = [
-  { jp: "風が運ぶ君の朝、", romaji: "Kaze ga hakobu kimi no asa,", en: "The wind carries your morning," },
-  { jp: "紅葉の音が揺れる夜、", romaji: "momiji no oto ga yureru yoru,", en: "the night where maple leaves rustle," },
-  { jp: "この秋の季節に、", romaji: "kono aki no kisetsu ni,", en: "in this autumn season," },
-  { jp: "僕は祈る。", romaji: "boku wa inoru.", en: "I pray." },
-  { jp: "誕生日おめでとう。", romaji: "Tanjoubi omedetou.", en: "Happy birthday." },
   { jp: "風が運ぶ君の朝、", romaji: "Kaze ga hakobu kimi no asa,", en: "The wind carries your morning," },
   { jp: "紅葉の音が揺れる夜、", romaji: "momiji no oto ga yureru yoru,", en: "the night where maple leaves rustle," },
   { jp: "この秋の季節に、", romaji: "kono aki no kisetsu ni,", en: "in this autumn season," },
@@ -28,10 +23,9 @@ const POEM_LINES = [
     jp: "秋の灯火に、君の歩みが導かれますように。",
     romaji: "Aki no tomoshibi ni, kimi no ayumi ga michibikaremasu you ni."
   }  
-  
 ];
 
-export default function EndingPage() {
+function EndingContent() {
   const router = useRouter();
   const params = useSearchParams();
   const score = Number(params.get("score") ?? 0);
@@ -42,7 +36,6 @@ export default function EndingPage() {
     const intro = setTimeout(() => setShowScroll(true), 800);
     return () => clearTimeout(intro);
   }, []);
-
 
   const blessing = useMemo(
     () =>
@@ -121,6 +114,20 @@ export default function EndingPage() {
         <Fireflies count={30} color="#f7f2c9" />
       </Background>
     </main>
+  );
+}
+
+export default function EndingPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="relative min-h-screen overflow-hidden bg-[#07060f] text-aki-ink flex items-center justify-center">
+          <div className="text-aki-mist/60">Loading...</div>
+        </main>
+      }
+    >
+      <EndingContent />
+    </Suspense>
   );
 }
 
