@@ -40,25 +40,31 @@ export function Fireflies({
     setFireflies(generateFireflies(count));
   }, [count]);
 
+  if (fireflies.length === 0) {
+    return null;
+  }
+
   return (
     <div
-      className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+      className={`pointer-events-none absolute inset-0 overflow-visible ${className}`}
       aria-hidden
+      style={{ zIndex: 5 }}
     >
       {fireflies.map((firefly) => (
         <motion.span
           key={firefly.id}
-          className="absolute rounded-full blur-[0.5px]"
+          className="absolute rounded-full blur-[0.5px] z-10"
           style={{
             backgroundColor: color,
-            width: `${firefly.scale * 6}px`,
-            height: `${firefly.scale * 6}px`,
+            width: `${Math.max(6, firefly.scale * 10)}px`,
+            height: `${Math.max(6, firefly.scale * 10)}px`,
             left: `${firefly.x}%`,
             top: `${firefly.y}%`,
-            boxShadow: `0 0 18px ${color}`,
+            boxShadow: `0 0 ${Math.max(15, firefly.scale * 25)}px ${color}`,
           }}
+          initial={{ opacity: 0.5 }}
           animate={{
-            opacity: [0, 1, 0],
+            opacity: [0.4, 1, 0.4],
             y: [-6, -20, -6],
             x: [0, 1.5, -1.5, 0],
           }}

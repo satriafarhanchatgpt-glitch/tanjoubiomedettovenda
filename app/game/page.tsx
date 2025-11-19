@@ -28,7 +28,7 @@ export default function GamePage() {
   const createLeaf = useCallback((): ActiveLeaf => {
     ids.current += 1;
     const rare = Math.random() < 0.15;
-    const duration = 5 + Math.random() * 3;
+    const duration = 10 + Math.random() * 5;
     return {
       id: `leaf-${ids.current}`,
       x: 10 + Math.random() * 80,
