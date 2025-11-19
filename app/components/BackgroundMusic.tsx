@@ -34,7 +34,7 @@ export function BackgroundMusic({
         const audio = new Audio(srcRef.current);
         audio.volume = volumeRef.current;
         audio.loop = true;
-        audio.playsInline = true; // Critical for iOS
+        audio.setAttribute("playsinline", "true"); // Critical for iOS
         audio.crossOrigin = "anonymous";
 
         // Play immediately within the user interaction context
@@ -45,7 +45,7 @@ export function BackgroundMusic({
         window.removeEventListener("click", handleFirstInteraction);
         window.removeEventListener("touchstart", handleFirstInteraction);
         window.removeEventListener("touchend", handleFirstInteraction);
-      } catch (error) {
+      } catch {
         // Play failed, reset flag so user can try again
         hasStartedRef.current = false;
       }

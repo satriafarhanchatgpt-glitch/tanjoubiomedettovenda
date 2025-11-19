@@ -27,7 +27,7 @@ export function useBackgroundMusic({
     audio.volume = volume;
     audio.loop = loop;
     audio.preload = "auto";
-    audio.playsInline = true; // Important for iOS
+    audio.setAttribute("playsinline", "true"); // Important for iOS
     audio.crossOrigin = "anonymous";
 
     const handleCanPlay = () => {
