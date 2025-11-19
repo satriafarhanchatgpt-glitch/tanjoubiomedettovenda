@@ -44,6 +44,7 @@ export default function GamePage() {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLeaves(Array.from({ length: 8 }, createLeaf));
   }, [createLeaf]);
 
