@@ -92,7 +92,7 @@ export default function GamePage() {
   }, [isPlaying, router]);
 
   const handleCollect = useCallback(
-    (leaf: ActiveLeaf) => {
+    (leaf: LeafDatum) => {
       setLeaves((prev) => prev.filter((item) => item.id !== leaf.id));
       const value = leaf.rare ? 5 : 1;
       scoreRef.current += value;
